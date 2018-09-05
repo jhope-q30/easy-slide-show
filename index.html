@@ -30,13 +30,14 @@
 .slide-item {
 	position:absolute;
 	margin:0;
-	margin-right:0px;
 	padding:0;
 	border:0;
 	width:100%;
 	right:0px;
 	overflow:hidden !important; /* creates clipped effect */
 	display:block;
+	margin-right:0px;
+	opacity:1;
 }
 @keyframes _next_slide {
   0% {
@@ -48,10 +49,10 @@
 }
 @keyframes _next_slide_fade {
   0% {
-    margin-right:0px;
+    opacity:1;
   }
   100% {
-    margin-right:-100%;
+    opacity:0;
   }
 }
 .slide-next {
@@ -68,13 +69,13 @@
 .slide-next_fade {
 	animation-name: _next_slide_fade;
   	animation-duration: 0.6056456456s;
-  	animation-timing-function: ease-out;
+  	animation-timing-function: ease-in;
   	animation-delay: 799;
   	animation-direction: normal;
   	animation-iteration-count: 1;
   	animation-fill-mode: none;
   	animation-play-state: initial;
-  	margin-right:-100%;
+  	opacity:0;
 }
 </style>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -122,7 +123,7 @@
 			var $this = this;
 
 			this.children = $(this.div).children();
-			this.count = this.children.length;
+			this.count    = this.children.length;
 
 			$(this.children).each(function(){
 
