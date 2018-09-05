@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en-US" class="no-js">
+<head>
+<meta charset="UTF-8">
+<title></title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--[if lte IE 8]>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-old-ie-min.css">
+<![endif]-->
+<!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+<!--<![endif]-->
+<style>
+
+.wrapper { margin:0 auto; padding:0; border:0; display:block; max-width:980px; } /* not required */
+
+#slides {
+	position:relative;
+	margin:0;
+	padding:0;
+	border:0;
+	display:block;
+	width:100%;
+	height:0;
+	overflow:hidden;
+	vertical-align:top;
+}
+#slides img { margin:0; padding:0; border:0; width:100%; display:block; }
+.slide-item {
+	position:absolute;
+	margin:0;
+	margin-right:0px;
+	padding:0;
+	border:0;
+	width:100%;
+	right:0px;
+	overflow:hidden !important; /* creates clipped effect */
+	display:block;
+}
+@keyframes _next_slide {
+  0% {
+    margin-right:0px;
+  }
+  100% {
+    margin-right:-100%;
+  }
+}
+.slide-next {
+	animation-name: _next_slide;
+  	animation-duration: 0.6056456456s;
+  	animation-timing-function: ease-out;
+  	animation-delay: 799;
+  	animation-direction: normal;
+  	animation-iteration-count: 1;
+  	animation-fill-mode: none;
+  	animation-play-state: initial;
+  	margin-right:-100%;
+}
+</style>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+<body>
+<div class="wrapper">
+	<div class="pure-g">
+		<div class="pure-u-1 pure-u-md-4-5">
+			<div class="content">
+				<main role="main">
+					<section>
+						<article>
+							<div id="slides">
+								<a href="#"><img src="1-IESO-AR-2016.jpg" alt="" /></a>
+								<a href="#"><img src="2-IESO-AR-2016.jpg" alt="" /></a>
+								<a href="#"><img src="3-IESO-AR-2016.jpg" alt="" /></a>
+								<a href="#"><img src="4-IESO-AR-2016.jpg" alt="" /></a>
+								<a href="#"><img src="5-IESO-AR-2016.jpg" alt="" /></a>
+								<a href="#"><img src="6-IESO-AR-2016.jpg" alt="" /></a>
+							</div>
+						</article>
+					</section>
+				</main>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+	var slides = function($div, $timing){
+		this.div        = $($div);
+		this.item_class = 'slide-item';
+		this.next_class = 'slide-next';
+		this.width      = 0;
+		this.height     = 0;
+		this.ratio      = 0;
+		this.timing     = $timing ? $timing : 1999;
+		this.count      = 0;
+		this.init = function(){
+			this.prep();
+			this.update();
+		}
+		this.prep = function(){
+
+			var $this = this;
+
+			this.children = $(this.div).children();
+			this.count = this.children.length;
+
+			$(this.children).each(function(){
+
+				$(this).addClass($this.item_class);
+				$(this).parent().prepend($(this)); // reverse the stacking order
+
+			});
+
+			// update container size
+
+			this.update_size();
+
+			// check for window resize
+
+			$(window).resize(function(){
+				$this.update_size();
+			});
+
+		}
+		this.update = function(){
+
+			var $this  = this,
+				$timer = setTimeout( function(){ $this.next(); }, $this.timing );
+
+		}
+		this.update_size = function(){
+
+			var $width  = 0,
+				$height = 0,
+				$ratio  = 0;
+
+			$(this.children).each(function(){
+
+				$img = $(this).find('img').eq(0);
+
+				if($img){
+
+					$height = $($img).height() > $height ? $($img).height() : $height;
+					$width  = $($img).width();
+					$ratio  = $width/$height;
+
+				}
+
+			});
+
+			this.width  = $width;
+			this.height = $height;
+			$(this.div).height(this.height);
+
+		}
+		this.next = function(){
+
+			// get current slide
+
+			var $this = this,
+				$cl   = $(this.div).children().last();
+
+			// find previous items and reset and change order
+
+			var $prev = $(this.div).find('.' + this.next_class).eq(0);
+
+			if($prev){
+
+				$($this.div).prepend($prev);
+				$($prev).removeClass(this.next_class);
+
+			}
+
+			$($cl).addClass(this.next_class);
+
+			this.update();
+
+		}
+	}
+
+	$(window).load(function(){
+		$(function(){
+			var s = new slides('#slides', 2499);
+			s.init();
+		});
+	});
+
+</script>
+</body>
+</html>
